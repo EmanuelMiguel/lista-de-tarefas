@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { updateTasksStatus } from '@/actions/toggle-done';
 import Filter from '@/components/filter';
 import { FilterType } from '@/components/filter';
+import { deleteCompletedTasks } from '@/actions/delete-completed-tasks';
 
 const Home = () => {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
@@ -93,6 +94,14 @@ const Home = () => {
       throw error;
     }
   };
+
+  const clearCompletedTasks = async () => {
+    const deletedTasks = await deleteCompletedTasks()
+
+    if (!deletedTasks) return
+
+    setTaskList(deletedTasks)
+  }
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -176,21 +185,21 @@ const Home = () => {
           <div className="flex justify-between mt-4">
             <div className="flex gap-2 items-center">
               <ListChecks size={18} />
-              <p className="text-xs">Tarefas Concluídas (3/3)</p>
+              <p className="text-xs">Tarefas Concluídas ({ taskList.filter(task => task.done).length }/{ taskList.length })</p>
             </div>
-            <ClearTask />
+            <ClearTask clearCompletedTasks={clearCompletedTasks}/>
           </div>
 
           <div className="h-2 w-full bg-gray-100 mt-4 rounded-md">
             <div
               className="h-full bg-blue-500 rounded-md"
-              style={{ width: '50%' }}
+              style={{ width: `${((taskList.filter(task => task.done).length) / taskList.length) * 100}%` }}
             ></div>
           </div>
 
           <div className="flex justify-end items-center mt-2 gap-2 font-bold">
             <Sigma size={18} />
-            <p className="text-xs">3 tarefas no total</p>
+            <p className="text-xs">{ taskList.length } tarefas no total</p>
           </div>
         </CardContent>
       </Card>

@@ -2,8 +2,11 @@ import { Trash } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 
+type ClearTaskProps = {
+  clearCompletedTasks: () => void;
+};
 
-const ClearTask = () => {
+const ClearTask = ({clearCompletedTasks}: ClearTaskProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -20,8 +23,8 @@ const ClearTask = () => {
           </AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>Sim</AlertDialogAction>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction className="cursor-pointer" onClick={clearCompletedTasks}>Sim</AlertDialogAction>
+          <AlertDialogCancel className="cursor-pointer">Cancelar</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
